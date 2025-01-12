@@ -1,16 +1,13 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/lv2/lv2.git"
-SCRIPT_COMMIT="c287eaa2948b7553ccce877115e7a94a07530d80"
+SCRIPT_COMMIT="79c318c7efffeee46ed301d1fc4724ac90ff03a8"
 
 ffbuild_enabled() {
     return 0
 }
 
 ffbuild_dockerbuild() {
-    git-mini-clone "$SCRIPT_REPO" "$SCRIPT_COMMIT" lv2
-    cd lv2
-
     mkdir build && cd build
 
     local myconf=(
