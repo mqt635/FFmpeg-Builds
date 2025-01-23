@@ -1,35 +1,46 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/harfbuzz/harfbuzz.git"
-SCRIPT_COMMIT="8bdaeddfcd86aa66f560ff1ae1ae71b1e1723463"
+SCRIPT_COMMIT="b5a65e0f20c30a7f13b2f6619479a6d666e603e0"
 
 ffbuild_enabled() {
     return 0
 }
 
 ffbuild_dockerbuild() {
-    git-mini-clone "$SCRIPT_REPO" "$SCRIPT_COMMIT" harfbuzz
-    cd harfbuzz
+    mkdir build && cd build
 
     local myconf=(
+        --cross-file=/cross.meson
         --prefix="$FFBUILD_PREFIX"
-        --disable-shared
-        --enable-static
-        --with-pic
+        --buildtype=release
+        --default-library=static
+        -Dfreetype=enabled
+        -Dglib=disabled
+        -Dgobject=disabled
+        -Dcairo=disabled
+        -Dchafa=disabled
+        -Dtests=disabled
+        -Dintrospection=disabled
+        -Ddocs=disabled
+        -Ddoc_tests=false
+        -Dutilities=disabled
     )
 
-    if [[ $TARGET == win* || $TARGET == linux* ]]; then
+    if [[ $TARGET == win* ]]; then
         myconf+=(
-            --host="$FFBUILD_TOOLCHAIN"
+            -Dgdi=enabled
         )
-    else
-        echo "Unknown target"
-        return -1
     fi
 
-    export LIBS="-lpthread"
+    meson setup "${myconf[@]}" ..
+    ninja -j"$(nproc)"
+    ninja install
 
-    ./autogen.sh "${myconf[@]}"
-    make -j$(nproc)
-    make install
+    echo "Libs.private: -lpthread" >> "$FFBUILD_PREFIX"/lib/pkgconfig/harfbuzz.pc
+}
+
+ffbuild_configure() {
+    (( $(ffbuild_ffver) > 600 )) || return 0
+    echo --enable-libharfbuzz
 }

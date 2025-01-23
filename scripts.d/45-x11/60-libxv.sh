@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://gitlab.freedesktop.org/xorg/lib/libxv.git"
-SCRIPT_COMMIT="d419928942dbf1897c9627475aa4a2828a81240f"
+SCRIPT_COMMIT="e1cde54538060c4fd3a3d02e3d2e2b7e5da7bff9"
 
 ffbuild_enabled() {
     [[ $TARGET != linux* ]] && return -1
@@ -10,9 +10,6 @@ ffbuild_enabled() {
 }
 
 ffbuild_dockerbuild() {
-    git-mini-clone "$SCRIPT_REPO" "$SCRIPT_COMMIT" libxv
-    cd libxv
-
     autoreconf -i
 
     local myconf=(

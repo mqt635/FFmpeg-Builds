@@ -1,16 +1,13 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/drobilla/zix.git"
-SCRIPT_COMMIT="18e62483cb7173c6604f7dd2097299e47c2a4c0c"
+SCRIPT_COMMIT="8ab9795a4c0403a88cd01874caf5f58776ae24ca"
 
 ffbuild_enabled() {
     return 0
 }
 
 ffbuild_dockerbuild() {
-    git-mini-clone "$SCRIPT_REPO" "$SCRIPT_COMMIT" zix
-    cd zix
-
     mkdir build && cd build
 
     local myconf=(

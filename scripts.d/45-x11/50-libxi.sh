@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://gitlab.freedesktop.org/xorg/lib/libxi.git"
-SCRIPT_COMMIT="08431d0684f9a1edf199f6c6060d2bef1ac78399"
+SCRIPT_COMMIT="3c2d5aedd7708c75710b39268631762de904c304"
 
 ffbuild_enabled() {
     [[ $TARGET != linux* ]] && return -1
@@ -9,9 +9,6 @@ ffbuild_enabled() {
 }
 
 ffbuild_dockerbuild() {
-    git-mini-clone "$SCRIPT_REPO" "$SCRIPT_COMMIT" libxi
-    cd libxi
-
     autoreconf -i
 
     local myconf=(
